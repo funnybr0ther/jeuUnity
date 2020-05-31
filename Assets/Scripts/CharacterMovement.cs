@@ -21,10 +21,15 @@ public class CharacterMovement : MonoBehaviour
     //Mouse-World-Related Private Variables
     private Vector3 _mousePos;
     private Vector3 _relativePos;
+    private Camera cam;
+    private static readonly int LookX = Animator.StringToHash("LookX");
+    private static readonly int LookY = Animator.StringToHash("LookY");
+    
 
     void Start()
     {
         //Component Assignment
+        cam = Camera.main;
         _body = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _transform = GetComponent<Transform>();
@@ -35,11 +40,14 @@ public class CharacterMovement : MonoBehaviour
         //Getting Arrow Input Keys
         _horizontal = Input.GetAxisRaw("Horizontal");
         _vertical = Input.GetAxisRaw("Vertical");
-        
         //Mouse Position in World Units & Relative Position to player
-        _mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        _relativePos = _mousePos - transform.position;
-
+        _mousePos = Input.mousePosition;
+        Vector3 mousePos = cam.ScreenToWorldPoint(new Vector3(_mousePos.x, _mousePos.y, cam.nearClipPlane));
+//        Debug.Log(mousePos.ToString());
+        _relativePos = mousePos - transform.position;
+        Debug.Log(_relativePos.ToString());
+        _animator.SetFloat(LookX,_relativePos.x);
+        _animator.SetFloat(LookY,_relativePos.y);
     }
 
     private void FixedUpdate()
