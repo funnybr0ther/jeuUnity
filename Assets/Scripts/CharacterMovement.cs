@@ -41,10 +41,7 @@ public class CharacterMovement : MonoBehaviour
         _horizontal = Input.GetAxisRaw("Horizontal");
         _vertical = Input.GetAxisRaw("Vertical");
         //Mouse Position in World Units & Relative Position to player
-        _mousePos = Input.mousePosition;
-        Vector3 mousePos = cam.ScreenToWorldPoint(new Vector3(_mousePos.x, _mousePos.y, cam.nearClipPlane));
-//        Debug.Log(mousePos.ToString());
-        _relativePos = mousePos - transform.position;
+        Vector3 _relativePos = Input.mousePosition - cam.WorldToScreenPoint(transform.position);
         Debug.Log(_relativePos.ToString());
         _animator.SetFloat(LookX,_relativePos.x);
         _animator.SetFloat(LookY,_relativePos.y);
